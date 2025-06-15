@@ -1,11 +1,11 @@
 package org.cibertec.soluciont2.service;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface GenericService<T, ID> {
-     T getById(ID id);
-     List<T> getAll();
-     void create(T entity);
-     void modify(T entity);
-     void remove(ID id);
+     Optional<T> buscarPorID(ID id);
+     List<T> obtenerTodos();
+     void grabar(T entity);
+     void eliminar(ID id);
 }

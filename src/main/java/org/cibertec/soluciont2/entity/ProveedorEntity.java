@@ -1,36 +1,27 @@
 package org.cibertec.soluciont2.entity;
-
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.Data;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Entity
-@Table(name = "provider")
+@Table(name = "tb_provider")
 public class ProveedorEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Integer id;
-
-    @Column(name = "doc_number")
-    private String doc;
-
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "phone")
     private String telefono;
-
-    @Column(name = "email")
     private String email;
 
-    @Column(name = "hash")
-    private String hash;
+    @OneToOne
+    @JoinColumn(name = "id_persona", nullable = false)
+    private PersonaEntity persona;
 
-
-    @ManyToOne
-    @JoinColumn(name = "idpais")
-    private CountryEntity pais;
-
+    @OneToMany(mappedBy = "proveedor")
+    private List<ProductoEntity> productos;
 
 }

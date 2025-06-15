@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
+
+<head>
+  <title>2/3</title>
+</head>
+
+
+<div layout:fragment="content">
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h5 class="m-0">Seleccion de Productos 2/3</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+  <form method="post" th:action="@{/store/productos}" class="row g-2 align-items-center">
+
+    <div class="col-auto">
+      <label class="visually-hidden" for="productoSelect">Producto</label>
+      <select id="productoSelect" name="productoId" class="form-select">
+        <option th:each="p : ${productos}" th:value="${p.id}" th:text="${p.descripcion}"></option>
+      </select>
+    </div>
+
+    <div class="col-auto">
+      <label class="visually-hidden" for="cantidadInput">Cantidad</label>
+      <input id="cantidadInput" type="number" name="cantidad" min="1" value="1" class="form-control" placeholder="Cantidad" />
+    </div>
+
+    <div class="col-auto">
+      <button type="submit" class="btn btn-primary">Agregar Producto</button>
+    </div>
+    <div class="col-auto">
+    <a href="/store/confirmar" class="btn btn-success">Continuar</a>
+    </div>
+  </form>
+
+
+  <table>
+    <tr th:each="d, i : ${pedidoWizard.detalles}">
+      <td th:text="${d.producto.descripcion}"></td>
+      <td th:text="${d.cantidad}"></td>
+      <td th:text="${d.precio}"></td>
+      <td><a th:href="@{'/store/eliminar-producto/' + ${i.index}}">Eliminar</a></td>
+    </tr>
+  </table>
+
+
+
+</div>
+</html>

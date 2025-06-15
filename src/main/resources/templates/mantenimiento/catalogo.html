@@ -1,0 +1,72 @@
+<!-- templates/mantenimiento/catalogo.html -->
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
+
+<div layout:fragment="content">
+  <div class="content-header">
+    <div class="container-fluid">
+      <h1 class="m-0">Mantenimiento de Catálogos</h1>
+    </div>
+  </div>
+
+  <section class="content">
+    <div class="container-fluid">
+      <!-- Formulario para agregar nuevo catálogo -->
+      <div class="card card-primary">
+        <div class="card-header">
+          <h3 class="card-title">Nuevo Catálogo</h3>
+        </div>
+        <div class="card-body">
+          <form th:action="@{/catalogo/guardar}" th:object="${catalogoNuevo}" method="post">
+            <div class="form-group">
+              <label for="codigo">Código</label>
+              <input type="text" class="form-control" id="codigo" th:field="*{codigo}" required />
+            </div>
+            <div class="form-group">
+              <label for="descripcion">Descripción</label>
+              <input type="text" class="form-control" id="descripcion" th:field="*{descripcion}" required />
+            </div>
+            <button type="submit" class="btn btn-success">Agregar Catálogo</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Lista de catálogos con valores -->
+      <div class="accordion" id="catalogoAccordion">
+        <div th:each="catalogo : ${catalogos}" class="card">
+          <div class="card-header" th:attr="id='heading__' + ${catalogo.id}">
+            <h2 class="mb-0">
+              <button class="btn btn-link text-left w-100" type="button" data-bs-toggle="collapse" th:attr="data-bs-target='#collapse__' + ${catalogo.id}" aria-expanded="true">
+                <b th:text="${catalogo.codigo}"></b>: <span th:text="${catalogo.descripcion}"></span>
+              </button>
+            </h2>
+          </div>
+          <div th:attr="id='collapse__' + ${catalogo.id}" class="collapse" th:classappend="${catalogoStat.index == 0} ? 'show'" th:attrappend="aria-labelledby='heading__' + ${catalogo.id}" data-bs-parent="#catalogoAccordion">
+            <div class="card-body">
+              <!-- Formulario para agregar valor -->
+              <form th:action="@{/catalogo/valor/agregar}" th:object="${valorNuevo}" method="post" class="mb-3">
+                <input type="hidden" name="catalogoId" th:value="${catalogo.id}" />
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Nuevo valor" th:field="*{valor}" required />
+                  <button class="btn btn-primary" type="submit">Agregar Valor</button>
+                </div>
+              </form>
+
+              <!-- Lista de valores -->
+              <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center"
+                    th:each="valor : ${catalogo.valores}" th:text="${valor.valor}">
+                  <a th:href="@{'/catalogo/valor/eliminar/' + ${valor.id}}" class="btn btn-sm btn-danger float-end">Eliminar</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+</html>

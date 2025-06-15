@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
+<head>
+  <title>Resumen de Pedido</title>
+</head>
+
+<div layout:fragment="content" class="content-wrapper">
+
+  <!-- Encabezado -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Resumen del Pedido</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a th:href="@{/}">Inicio</a></li>
+            <li class="breadcrumb-item active">Resumen</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contenido principal -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+
+          <div class="invoice p-3 mb-3">
+
+            <!-- Cabecera -->
+            <div class="row">
+              <div class="col-12">
+                <h4>
+                  <i class="fas fa-store"></i> Tienda Virtual
+                  <small class="float-right">Fecha: <span th:text="${#dates.format(pedido.fechaPedido, 'dd/MM/yyyy')}"></span></small>
+                </h4>
+              </div>
+            </div>
+
+            <!-- Información del cliente -->
+            <div class="row invoice-info mt-3">
+              <div class="col-sm-6 invoice-col">
+                Cliente
+                <address>
+                  <strong th:text="${pedido.cliente.nombres_razonsocial}">Nombre Cliente</strong><br>
+                  <span th:text="'Documento: ' + ${pedido.cliente.num_doc}"></span><br>
+                  <span th:text="'Correo: ' + ${pedido.cliente.correo}"></span><br>
+                  <span th:text="'Teléfono: ' + ${pedido.cliente.telefono}"></span>
+                </address>
+              </div>
+
+              <div class="col-sm-6 invoice-col">
+                <b>Pedido N°:</b> <span th:text="${pedido.id}"></span><br>
+                <b>Estado:</b> <span th:text="${pedido.estado}"></span><br>
+                <b>Total:</b> S/. <span th:text="${pedido.total}"></span>
+              </div>
+            </div>
+
+            <!-- Tabla de productos -->
+            <div class="row mt-4">
+              <div class="col-12 table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                  <tr>
+                    <th>Cantidad</th>
+                    <th>Producto</th>
+                    <th>Precio Unitario</th>
+                    <th>Subtotal</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr th:each="detalle : ${pedido.detalles}">
+                    <td th:text="${detalle.cantidad}"></td>
+                    <td th:text="${detalle.producto.descripcion}"></td>
+                    <td th:text="${detalle.precio}"></td>
+                    <td th:text="${#numbers.formatDecimal(detalle.precio * detalle.cantidad, 1, 'POINT', 2, 'NONE')}"></td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Total -->
+            <div class="row mt-3">
+              <div class="col-6"></div>
+              <div class="col-6">
+                <p class="lead">Resumen</p>
+                <div class="table-responsive">
+                  <table class="table">
+                    <tr>
+                      <th>Total:</th>
+                      <td>S/. <span th:text="${pedido.total}"></span></td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Botones -->
+            <div class="row no-print mt-4">
+              <div class="col-12">
+                <a th:href="@{/store}" class="btn btn-default"><i class="fas fa-arrow-left"></i> Nuevo Pedido</a>
+                <button type="button" class="btn btn-primary float-right" onclick="window.print();"><i class="fas fa-print"></i> Imprimir</button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</html>

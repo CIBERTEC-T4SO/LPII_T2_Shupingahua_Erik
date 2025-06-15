@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
+
+<head>
+  <title>1/3</title>
+</head>
+
+<div layout:fragment="content">
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h5 class="m-0">Seleccion de Cliente 1/3</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+  <form method="post" th:action="@{/store/cliente}" class="row g-2 align-items-center">
+    <div class="col-auto">
+      <label class="visually-hidden" for="clienteId">Producto</label>
+    <select name="clienteId" class="form-control">
+      <option th:each="c : ${clientes}" th:value="${c.idPersona}" th:text="${c.nombres_razonsocial}"></option>
+    </select>
+    </div>
+    <div class="col-auto">
+    <button type="submit" class="btn btn-primary">Siguiente</button>
+    </div>
+  </form>
+
+</div>
+</html>

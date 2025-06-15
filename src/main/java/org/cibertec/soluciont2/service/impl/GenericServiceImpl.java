@@ -1,42 +1,38 @@
 package org.cibertec.soluciont2.service.impl;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.cibertec.soluciont2.service.GenericService;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GenericServiceImpl<T,ID> implements GenericService<T,ID> {
 
+
     protected  JpaRepository<T,ID> repository;
-/*
-    public GenericServiceImpl(JpaRepository<T, ID> repository) {
-        this.repository = repository;
-    }*/
+
 
     @Override
-    public T getById(ID id) {
-        return repository.findById(id).get();
+    public Optional<T> buscarPorID(ID id) {
+        return Optional.ofNullable(repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("No se encontró entidad con ID: " + id)));
     }
 
     @Override
-    public List<T> getAll() {
+    public List<T> obtenerTodos() {
         return  repository.findAll();
     }
 
     @Override
-    public void create(T entity) {
+    public void grabar(T entity) {
         repository.save(entity);
     }
 
     @Override
-    public void modify(T entity) {
-        repository.save(entity);
-    }
-
-    @Override
-    public void remove(ID id) {
+    public void eliminar(ID id) {
         repository.deleteById(id);
     }
 }

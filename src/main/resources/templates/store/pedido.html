@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
+
+<head>
+  <title>Nuevo Pedido</title>
+</head>
+
+<div layout:fragment="content">
+  <div class="container-fluid">
+    <h3>Nuevo Pedido</h3>
+
+    <!-- Formulario para agregar producto -->
+    <form th:action="@{/store/agregar-producto}" method="post" th:object="${detalleNuevo}">
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="producto">Producto</label>
+          <select class="form-select" name="productoId" required>
+            <option th:each="prod : ${productos}"
+                    th:value="${prod.id}"
+                    th:text="${prod.descripcion}">Producto</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label for="cantidad">Cantidad</label>
+          <input type="number" th:field="*{cantidad}" class="form-control" min="1" required />
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+          <button type="submit" class="btn btn-primary w-100">Agregar Producto</button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Tabla de productos agregados -->
+    <div th:if="${pedidoActual.detalles != null and !pedidoActual.detalles.isEmpty()}">
+      <h5>Productos en el pedido</h5>
+      <table class="table table-bordered">
+        <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Cantidad</th>
+          <th>Precio Unitario</th>
+          <th>Subtotal</th>
+          <th>Acción</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="detalle, iter : ${pedidoActual.detalles}">
+          <td th:text="${detalle.producto.descripcion}">Nombre</td>
+          <td th:text="${detalle.cantidad}">1</td>
+          <td th:text="${detalle.precio}">10.00</td>
+          <td th:text="${#numbers.formatDecimal(detalle.cantidad * detalle.precio, 1, 'POINT', 2, 'COMMA')}">10.00</td>
+          <td>
+            <a th:href="@{/store/remover/{index}(index=${iter.index})}" class="btn btn-danger btn-sm">Eliminar</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <!-- Botón de confirmar pedido -->
+      <form th:action="@{/store/guardar}" method="post">
+        <button type="submit" class="btn btn-success">Confirmar Pedido</button>
+      </form>
+    </div>
+    <div th:if="${pedidoActual.detalles == null or pedidoActual.detalles.isEmpty()}">
+      <p class="text-muted">No hay productos en el pedido.</p>
+    </div>
+  </div>
+</div>
+</html>
