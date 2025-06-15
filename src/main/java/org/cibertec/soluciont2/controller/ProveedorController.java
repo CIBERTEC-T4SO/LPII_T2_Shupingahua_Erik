@@ -3,6 +3,7 @@ package org.cibertec.soluciont2.controller;
 import org.cibertec.soluciont2.entity.ProveedorEntity;
 import org.cibertec.soluciont2.service.CountryService;
 import org.cibertec.soluciont2.service.ProveedorService;
+import org.cibertec.soluciont2.util.HashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/proveedor")
 public class ProveedorController {
+
+    @Value("${api.name.author}")
+    private String prop_author;
 
     @Autowired
     private ProveedorService proveedorService;
@@ -32,6 +36,9 @@ public class ProveedorController {
 
     @PostMapping("/guardar")
     public String guardarProveedor(@ModelAttribute ProveedorEntity proveedor) {
+
+        String newHash=prop_author+proveedor.getDoc()+proveedor.getPais().getName();
+        proveedor.setHash(HashUtil.Nuevo((newHash)));
         proveedorService.create(proveedor);
         return "redirect:/proveedor/inicio";
     }
