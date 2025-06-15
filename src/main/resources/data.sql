@@ -27,6 +27,7 @@ CREATE TABLE provider (
                           name VARCHAR(100),
                           phone VARCHAR(20),
                           email VARCHAR(100),
+                          hash VARCHAR(2000),
                           idpais INT,
                           FOREIGN KEY (idpais) REFERENCES country(id)
 );
