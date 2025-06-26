@@ -1,4 +1,4 @@
-package org.cibertec.soluciont2.controller;
+package org.cibertec.soluciont2.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +8,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 public class PedidoDetalleReporteDto {
+
     private Integer id;
     private Integer cantidad;
     private Double descuento;
@@ -32,10 +33,10 @@ public class PedidoDetalleReporteDto {
     private Integer stock;
     private String categoria;
     private Integer id_proveedor;
-    private double total_calc;
-    public PedidoDetalleReporteDto(double total_calc, Date fecha,  String nombres_razonsocial, String numeroDocumento, Integer id, Integer id_prod, String descripcion, Double precio, Integer cantidad) {
+    private double cal_total;
+    public PedidoDetalleReporteDto(double cal_total, Date fecha,  String nombres_razonsocial, String numeroDocumento, Integer id, Integer id_prod, String descripcion, Double precio, Integer cantidad) {
         this.fecha= fecha;
-        this.total_calc=total_calc;
+        this.cal_total=cal_total;
         this.nombres_razonsocial=nombres_razonsocial;
         this.numeroDocumento=numeroDocumento;
         this.id = id;
