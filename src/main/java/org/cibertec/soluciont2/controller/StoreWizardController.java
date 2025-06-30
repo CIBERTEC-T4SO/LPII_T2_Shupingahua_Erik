@@ -1,11 +1,11 @@
 package org.cibertec.soluciont2.controller;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.cibertec.soluciont2.dto.PedidoDetalleReporteDto;
 import org.cibertec.soluciont2.entity.*;
 import org.cibertec.soluciont2.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +17,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import java.io.InputStream;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -125,13 +123,8 @@ public String paso3Resumen(HttpSession session, Model model) {
     public void generarPDF(@PathVariable("id") Integer id, HttpServletResponse response) throws Exception {
         PedidoEntity pedido = pedidoService.buscarPorID(id).get();
 
-        InputStream jasperStream = getClass().getResourceAsStream("/reportej.jasper");
-/*
-        Map<String, Object> params = new HashMap<>();
-        params.put("fecha", pedido.getFecha());
-        params.put("total", pedido.getDetalles().stream()
-                .mapToDouble(d -> d.getPrecio() * d.getCantidad())
-                .sum());*/
+        // Cargar el archivo Jasper desde el classpath
+        InputStream jasperStream = getClass().getResourceAsStream("/reportjs.jasper");
 
         List<PedidoDetalleReporteDto> detallesDto = pedido.getDetalles().stream()
                 .map(det -> new PedidoDetalleReporteDto(
@@ -141,7 +134,7 @@ public String paso3Resumen(HttpSession session, Model model) {
                         pedido.getFecha(),
                         pedido.getCliente().getNombres_razonsocial(),
                         pedido.getCliente().getNumeroDocumento(),
-                        det.getProducto().getId(),
+                        pedido.getId(),
                         det.getProducto().getId(),
                         det.getProducto().getDescripcion(),
                         det.getPrecio(),
